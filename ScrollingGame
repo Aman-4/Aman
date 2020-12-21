@@ -1,0 +1,311 @@
+# Aman Anand
+######################################################
+# Assignment: Project 2
+# UIN: 657513426
+# URL to your Repl.it: https://trinket.io/library/trinkets/1749c069bc
+######################################################
+#!/bin/python3
+
+import turtle
+import random
+import math
+
+s = turtle.Screen()
+s.setup(1250,800)
+s_width = 1250
+s_height = 800
+s.bgpic('6852707_preview.png')
+
+t = turtle.Turtle()
+t.hideturtle()
+t1 = turtle.Turtle()
+t1.hideturtle()
+t1.tracer(0)
+t2 = turtle.Turtle()
+t2.tracer(0)
+lives = 0 
+score = 0
+monster1 = {"turtle": turtle.Turtle(), "shape": "mon1.png", "move_distance" : 10}
+player = {"turtle": turtle.Turtle(), "shape": "startup.png", "move_distance" : 10}
+bullet = {"turtle": turtle.Turtle(), "shape": "bullet.png", "move_distance" : 10}
+bullet["turtle"].speed(5)
+monster1["turtle"].speed(5)
+# heart = {"turtle": turtle.Turtle(), "shape": "heart.png", "move_distance" : 10}
+
+# Rocketship/Player Function
+
+def draw_rocketship():
+  # Adds the rocketship to object
+  player["turtle"].penup()
+  player["turtle"].setx(-550)
+  player["turtle"].hideturtle()
+  player["turtle"].sety(-280)
+  player["turtle"].setheading(0)
+  player["turtle"].showturtle()
+  # Associates a shape with this turtle
+  s.addshape(player["shape"])
+  player["turtle"].shape(player["shape"])
+  
+  # Asscoiates keys with rocketship
+  
+  def up():
+    print("starting up")
+    player["turtle"].clear()
+    current_y = player["turtle"].ycor()
+    # add move distance to current y
+    new_y = player["move_distance"] + current_y
+    player["turtle"].sety(new_y)
+  
+  def down():
+    print("starting down")
+    t = player["turtle"]
+    current_y = t.ycor()
+    new_y = current_y - player["move_distance"] 
+    t.sety(new_y)
+  
+  # def left():
+  #   print("starting left")
+  #   t = player["turtle"]
+  #   current_x = t.xcor()
+  #   new_x = current_x - player["move_distance"] 
+  #   t.setx(new_x)
+  
+  # def right():
+  #   print("starting right")
+  #   t = player["turtle"]
+  #   current_x = t.xcor()
+  #   new_x = player["move_distance"] + current_x
+  #   t.setx(new_x)
+  
+  s.onkey(up, "Up")
+  s.onkey(down, "Down")
+  
+  s.onkey(up, "W")
+  s.onkey(down, "S")
+  s.listen()
+
+
+# Creating the Monsters/Harm Objects
+
+def monster(x,y):
+  # # monster2 = {"turtle": turtle.Turtle(), "shape": "mon2.png", "move_distance" : 10}
+  monster1["turtle"].penup()
+  monster1["turtle"].hideturtle()
+  monster1["turtle"].goto(x,y)
+  monster1["turtle"].setheading(0)
+  monster1["turtle"].showturtle()
+  # Associates a shape with the screen
+  s.addshape(monster1["shape"])
+  monster1["turtle"].shape(monster1["shape"])
+  monster1["turtle"].speed(2)
+  s.update()
+
+# Creating the bullet/Benefit object
+
+def bullet_1(x,y):
+  bullet["turtle"].penup()
+  bullet["turtle"].hideturtle()
+  bullet["turtle"].goto(x,y)
+  bullet["turtle"].setheading(0)
+  bullet["turtle"].showturtle()
+  # Associates a shape with the screen
+  s.addshape(bullet["shape"])
+  bullet["turtle"].shape(bullet["shape"])
+  bullet["turtle"].speed(2)
+  s.update()
+  
+# def heart_for_lives(x,y):
+#   heart["turtle"].penup()
+#   heart["turtle"].hideturtle()
+#   heart["turtle"].goto(x,y)
+#   heart["turtle"].setheading(90)
+#   heart["turtle"].showturtle()
+#   # Associates a shape with the screen
+#   s.addshape(heart["shape"])
+#   heart["turtle"].shape(heart["shape"])
+
+# for i in range(1):
+#   monster(random.randint(-100,100),random.randint(-100,250))
+#   monster(random.randint(200,500),random.randint(-200,150))
+
+# Create the player's bullet
+
+# def bullet():
+#   s.addshape(bullet["shape"])
+#   bullet["turtle"].penup()
+#   bullet["turtle"].speed(0)
+#   bullet["turtle"].setheading(90)
+#   bullet["turtle"].hideturtle()
+  
+  # bulletspeed = 70
+  
+#Define bullet state
+#ready- ready to fire
+#fire- bullet is firing
+
+# bulletstate = str(0)
+
+# def fire_bullet():
+#     bullet = {"turtle": turtle.Turtle(), "shape": "bullet.png", "move_distance" : 10}
+#     # bulletstate = "ready"
+#     s.addshape(bullet["shape"])
+#     bullet["turtle"].penup()
+#     bullet["turtle"].speed(0)
+#     bullet["turtle"].setheading(90)
+#     bullet["turtle"].hideturtle()
+#     bulletspeed = 70
+#     if bulletstate == "ready":
+#       bulletstate = "fire"
+#       # Move the bullet to the just above the player
+#       x = draw_rocketship.xcor()
+#       y = draw_rocketship.ycor() +10
+#       bullet.setposition(x,y)
+#       bullet.showturtle()
+
+def writing(score,lives):
+  # Score
+  t1.speed(15)
+  t1.clear()
+  t1.fillcolor("white")
+  t1.penup()
+  t1.goto(-420,340)
+  t1.pendown()
+  t1.write("Score: " + str(score),move=False, align='middle', font=('Impact', 35, 'normal'))
+  # Lives
+  t1.fillcolor("white")
+  t1.penup()
+  t1.goto(200,340)
+  t1.pendown()
+  t1.write("Lives: " + str(lives), move=False, align='middle', font=('Impact', 35, 'normal'))
+  t1.update()
+  s.update()
+  # Collision for harm object and Rocketship
+ # distance formula
+ 
+def isCollision(t1,t2):
+  distance = math.sqrt(math.pow(t1.xcor()-t2.xcor(),2)+math.pow(t1.ycor()-t2.ycor(),2))
+  if distance < 65:
+    return True
+  else:
+    return False
+  s.update()
+
+def main():
+  draw_rocketship()
+  t1.update()
+  s.update()
+  # Lets monsters appear on other side of screen once it reaches the end
+  monster(s_width/2,random.randint(-100,150))
+  t1.update()
+  s.update()
+  # Lets bullet appear on other side of screen once it reaches the end
+  bullet_1(s_width/2,random.randint(100,150))
+  t1.update()
+  s.update()
+  t1.clear()
+  t1.fillcolor("white")
+  t1.penup()
+  t1.goto(-420,340)
+  t1.pendown()
+  t1.write("Score: 0", move=False, align='middle', font=('Impact', 35, 'normal'))
+  t1.update()
+  s.update()
+  t1.fillcolor("white")
+  t1.penup()
+  t1.goto(200,340)
+  t1.pendown()
+  t1.write("Lives: 3", move=False, align='middle', font=('Impact', 35, 'normal'))
+  t1.update()
+  s.update()
+  score = 0
+  lives = 3
+  # write(score,lives)
+  # Lets monsters appear on other side of screen once it reaches the end
+  monster(s_width/2,random.randint(-200,250))
+  t1.update()
+  s.update()
+  # Lets bullet appear on other side of screen once it reaches the end
+  bullet_1(s_width/2,random.randint(0,50))
+  t1.update()
+  s.update()
+  # heart_for_lives(360,360)
+  # heart_for_lives(460,360)
+  while (lives<=3 and lives>0):
+  # monsters.clear()
+    # write(score,lives)
+    monster1["turtle"].setx(monster1["turtle"].xcor()-7)
+    t1.update()
+    s.update()
+    bullet["turtle"].setx(bullet["turtle"].xcor()-6)
+    t1.update()
+    s.update()
+    if (monster1["turtle"].xcor()<=-800):
+      monster1["turtle"].hideturtle()
+      monster1["turtle"].setx(800)
+      monster1["turtle"].sety(random.randint(50,250))
+      monster1["turtle"].showturtle()
+      t1.update()
+      s.update()
+    if (bullet["turtle"].xcor()<=-800):
+      bullet["turtle"].hideturtle()
+      bullet["turtle"].setx(800)
+      bullet["turtle"].sety(random.randint(0,150))
+      bullet["turtle"].showturtle()
+      t1.update()
+      s.update()
+    if isCollision(player["turtle"],monster1["turtle"]) == True:
+      lives = lives-1
+      monster1["turtle"].hideturtle()
+      monster1["turtle"].setx(800)
+      monster1["turtle"].sety(random.randint(50,200))
+      t1.update()
+      monster1["turtle"].showturtle()
+      writing(score,lives)
+    t1.update()
+    t2.update()
+    monster1["turtle"].update()
+    bullet["turtle"].update()
+    s.update()
+    #BENEFIT OBJECT
+    if isCollision(player["turtle"],bullet["turtle"]) == True:
+      score = score+1
+      bullet["turtle"].hideturtle()
+      bullet["turtle"].setx(800)
+      bullet["turtle"].sety(random.randint(-150,150))
+      bullet["turtle"].showturtle()
+      writing(score,lives)
+    t1.update()
+    t2.update()
+    monster1["turtle"].update()
+    bullet["turtle"].update()
+    s.update()
+  if lives <= 0:
+    t1.hideturtle()
+    t1.clear()
+    monster1["turtle"].hideturtle()
+    bullet["turtle"].hideturtle()
+    t.hideturtle()
+    t.tracer(0)
+    t1.tracer(0)
+    t2.fillcolor("white")
+    t2.penup()
+    t2.goto(-100,0)
+    t2.pendown()
+    t2.write("GAME OVER", move=False, align='middle', font=('Impact', 35, 'normal'))
+    t2.tracer(0)
+    t2.update()
+    s.update()
+    t2.hideturtle()
+    # t1.hideturtle()
+    # s.clear()
+    # t1.showturtle() 
+  # monster1["turtle"].speed(5)
+  # bullet["turtle"].speed(5)
+s.update()  
+main()
+
+t1.update()
+t2.update()
+monster1["turtle"].update()
+bullet["turtle"].update()
+s.update()
